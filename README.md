@@ -1,4 +1,4 @@
-# Streaming Handler
+# Streaming Manager
 
 A simple command-line app to manage movies and TV shows you want to watch.
 
