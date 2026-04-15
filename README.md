@@ -15,8 +15,8 @@ A simple command-line app to manage movies and TV shows you want to watch.
 ## Compile & Run
 
 ```bash
-gcc -o streaming_handler main.c
-./streaming_handler
+gcc -o streaming_manager main.c
+./streaming_manager
 ```
 
 ## How It Works
