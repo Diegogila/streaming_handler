@@ -57,3 +57,7 @@ dkms.conf
 # Executable
 main
 main2.c
+
+#Local files
+movies.txt
+tv_shows.txt

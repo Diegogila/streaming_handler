@@ -128,10 +128,11 @@ void delete_item(char **list, int *count, char *kind_item);
 
 void get_data(char *kind_items, char **list, int *count);
 
-void save_data();
+void save_data(char *kind_items, char **list, int count);
 
 int main(){
     get_data("movies", movies, &movies_count);
+    get_data("tv_shows", tv_shows, &tv_shows_count);
     while (is_on) /* Main program loop - continues while is_on is true */
     {
         int user_choise;
@@ -226,22 +227,27 @@ int main(){
                 break;
             }
     }
-    save_data();
+    save_data("movies", movies, movies_count);
+    save_data("tv_shows", tv_shows, tv_shows_count);
     return 0;
 }
 
 /* ==================== FUNCTION IMPLEMENTATIONS ==================== */
 
-void save_data(){
-    FILE *file = fopen("data.txt", "w");
+void save_data(char *kind_item, char **list, int count){
+    char filename[100];
+    sprintf(filename, "%s.txt", kind_item);
+    FILE *file = fopen(filename, "w");
 
     if(file == NULL){
         printf("No se pudo leer el archivo\n");
         return;
     }
 
-    fprintf(file,"Hola mundo\n");
-    fprintf(file,"Hello world\n");
+    for (int i = 0; i < count; i++)
+    {
+        fprintf(file, "%s\n", list[i]);
+    }
 
     fclose(file);
     return;
@@ -260,6 +266,7 @@ void get_data(char *kind_item, char **list, int *count){
     char line[100];
 
     while(fgets(line, sizeof(line), file)){
+        line[strcspn(line, "\n")] = 0;
         list[*count] = malloc(strlen(line) + 1);
         strcpy(list[*count], line);
         (*count)++;
