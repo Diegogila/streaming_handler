@@ -109,6 +109,59 @@ void modify_item(char **list, int *count, char *kind_item);
 void delete_item(char **list, int *count, char *kind_item);
 
 
+
+
+/**
+ * validate_format()
+ * 
+ * DESCRIPTION:
+ *   Validates whether a given string follows the expected format.
+ *   Typically checks that the string contains valid content such as
+ *   "Platform: Item Name" and is not empty or malformed.
+ * 
+ * PARAMETERS:
+ *   str[in] - String to validate
+ * 
+ * RETURN:
+ *   int - Returns 1 if the format is valid, 0 otherwise
+ */
+int validate_format(char *str);
+
+/**
+ * get_data()
+ * 
+ * DESCRIPTION:
+ *   Reads data from a file corresponding to the given item type and
+ *   loads it into the provided list. Each valid line from the file
+ *   is stored as a dynamically allocated string in the list.
+ *   Updates the count of items loaded.
+ * 
+ * PARAMETERS:
+ *   kind_items[in]   - Type of items (used to determine file name)
+ *   list[in/out]     - Array of strings where data will be stored
+ *   count[in/out]    - Pointer to the number of items in the list
+ * 
+ * RETURN: void
+ */
+void get_data(char *kind_items, char **list, int *count);
+
+/**
+ * save_data()
+ * 
+ * DESCRIPTION:
+ *   Writes all items from the provided list into a file corresponding
+ *   to the given item type. Each item is written as a new line in the file,
+ *   ensuring proper formatting and persistence of data.
+ * 
+ * PARAMETERS:
+ *   kind_items[in] - Type of items (used to determine file name)
+ *   list[in]       - Array of strings containing the items to save
+ *   count[in]      - Number of items in the list
+ * 
+ * RETURN: void
+ */
+void save_data(char *kind_items, char **list, int count);
+
 /**
  * main()
  * 
@@ -126,13 +179,6 @@ void delete_item(char **list, int *count, char *kind_item);
  * 
  * RETURN: int - Always returns 0 (success)
  */
-
-int valid_format(char *str);
-
-void get_data(char *kind_items, char **list, int *count);
-
-void save_data(char *kind_items, char **list, int count);
-
 int main(){
     get_data("movies", movies, &movies_count);
     get_data("tv_shows", tv_shows, &tv_shows_count);
@@ -237,6 +283,12 @@ int main(){
 
 /* ==================== FUNCTION IMPLEMENTATIONS ==================== */
 
+/**
+ * validate_format() [DECLARATION]
+ * 
+ * Validates whether a given string follows the expected format.
+ * Ensures the string is not empty and matches the required structure.
+ */
 int validate_format(char *str){
     regex_t regex;
     int result;
@@ -248,6 +300,12 @@ int validate_format(char *str){
     return result == 0;
 }
 
+/**
+ * save_data() [DECLARATION]
+ * 
+ * Saves all items from the given list into a file corresponding to
+ * the specified item type, writing each item on a new line.
+ */
 void save_data(char *kind_item, char **list, int count){
     char filename[100];
     sprintf(filename, "%s.txt", kind_item);
@@ -269,7 +327,12 @@ void save_data(char *kind_item, char **list, int count){
     return;
 }
 
-
+/**
+ * get_data() [DECLARATION]
+ * 
+ * Reads data from a file based on the item type and loads it into
+ * the provided list, updating the item count.
+ */
 void get_data(char *kind_item, char **list, int *count){
     char filename[100];
     sprintf(filename, "%s.txt", kind_item);
