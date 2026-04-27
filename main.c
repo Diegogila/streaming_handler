@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <regex.h>
 
 /* ==================== GLOBAL VARIABLES ==================== */
 bool is_on = true;                           /* Control flag for main program loop */
@@ -125,6 +126,8 @@ void delete_item(char **list, int *count, char *kind_item);
  * 
  * RETURN: int - Always returns 0 (success)
  */
+
+int valid_format(char *str);
 
 void get_data(char *kind_items, char **list, int *count);
 
@@ -234,6 +237,17 @@ int main(){
 
 /* ==================== FUNCTION IMPLEMENTATIONS ==================== */
 
+int validate_format(char *str){
+    regex_t regex;
+    int result;
+
+    regcomp(&regex, "^[^:]+: [^:]+$", REG_EXTENDED);
+    result = regexec(&regex, str, 0, NULL, 0);
+    regfree(&regex);
+
+    return result == 0;
+}
+
 void save_data(char *kind_item, char **list, int count){
     char filename[100];
     sprintf(filename, "%s.txt", kind_item);
@@ -246,7 +260,9 @@ void save_data(char *kind_item, char **list, int count){
 
     for (int i = 0; i < count; i++)
     {
-        fprintf(file, "%s\n", list[i]);
+        if(validate_format(list[i])){
+            fprintf(file, "%s\n", list[i]);
+        } else printf("Formato incorrecto, no se puede guardar");
     }
 
     fclose(file);
