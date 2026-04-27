@@ -125,7 +125,13 @@ void delete_item(char **list, int *count, char *kind_item);
  * 
  * RETURN: int - Always returns 0 (success)
  */
+
+void get_data(char *kind_items, char **list, int *count);
+
+void save_data();
+
 int main(){
+    get_data("movies", movies, &movies_count);
     while (is_on) /* Main program loop - continues while is_on is true */
     {
         int user_choise;
@@ -220,10 +226,50 @@ int main(){
                 break;
             }
     }
+    save_data();
     return 0;
 }
 
 /* ==================== FUNCTION IMPLEMENTATIONS ==================== */
+
+void save_data(){
+    FILE *file = fopen("data.txt", "w");
+
+    if(file == NULL){
+        printf("No se pudo leer el archivo\n");
+        return;
+    }
+
+    fprintf(file,"Hola mundo\n");
+    fprintf(file,"Hello world\n");
+
+    fclose(file);
+    return;
+}
+
+
+void get_data(char *kind_item, char **list, int *count){
+    char filename[100];
+    sprintf(filename, "%s.txt", kind_item);
+    FILE *file = fopen(filename, "r");
+
+    if(file == NULL){
+        return ;
+    }
+
+    char line[100];
+
+    while(fgets(line, sizeof(line), file)){
+        list[*count] = malloc(strlen(line) + 1);
+        strcpy(list[*count], line);
+        (*count)++;
+    }
+
+    fclose(file);
+    return;
+
+
+}
 
 /**
  * movie_or_tv_show() [IMPLEMENTATION]
